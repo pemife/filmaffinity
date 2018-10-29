@@ -14,8 +14,8 @@
                                FROM peliculas p
                                JOIN generos g
                                  ON genero_id = g.id
-                              WHERE titulo ILIKE :titulo');
-        $st->execute([':titulo' => "%$buscarTitulo%"]);
+                              WHERE position(lower(:titulo) in lower(titulo)) != 0');
+        $st->execute([':titulo' => $buscarTitulo]);
         ?>
         <div>
             <fieldset>
