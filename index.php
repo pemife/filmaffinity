@@ -6,22 +6,50 @@
   </head>
   <body>
     <?php
-      $pdo = new PDO('pgsql:host=localhost;dbname=fa', 'fa', 'fa');
-      $st = $pdo->query('SELECT * FROM generos');
-      ?>
+    $buscarTitulo = isset($_GET['buscarTitulo'])
+                  ? trim($_GET['buscarTitulo'])
+                  : '';
+
+    $pdo = new PDO('pgsql:host=localhost;dbname=fa', 'fa', 'fa');
+    $st = $pdo->prepare('SELECT p.*, genero
+                           FROM peliculas p
+                           JOIN generos g
+                             ON genero_id = g.id
+                          WHERE titulo ILIKE :titulo');
+    $st->execute([':titulo' => "%$buscarTitulo%"]);
+    ?>
+    <div>
+      <fieldset>
+        <legend>Buscar... </legend>
+        <form action="" method="get">
+          <label for="buscarTitulo">Buscar por título</label>
+          <input id="buscarTitulo" type="text" name="buscarTitulo"
+              value="<?= $buscarTitulo ?>">
+          <input type="submit" name="" value="Buscar">
+        </form>
+      </fieldset>
+    </div>
+    <div style="margin-top: 20px">
       <table border="1" style="margin:auto">
         <thead>
-          <th>Id</th>
-          <th>Genero</th>
+          <th>Título</th>
+          <th>Año</th>
+          <th>Sinopsis</th>
+          <th>Duración</th>
+          <th>Género</th>
         </thead>
         <tbody>
           <?php foreach ($st as $fila) { ?>
             <tr>
-              <td><?= $fila['id'] ?></td>
+              <td><?= $fila['titulo'] ?></td>
+              <td><?= $fila['anyo'] ?></td>
+              <td><?= $fila['sinopsis'] ?></td>
+              <td><?= $fila['duracion'] ?></td>
               <td><?= $fila['genero'] ?></td>
             </tr>
           <?php } ?>
         </tbody>
       </table>
+    </div>
   </body>
 </html>
