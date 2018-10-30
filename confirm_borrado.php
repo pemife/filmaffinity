@@ -5,7 +5,19 @@
         <title>Confirmar borrado</title>
     </head>
     <body>
-        <?php $id = $_GET['id'] ?>
+        <?php
+        require 'auxiliar.php';
+
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        } else {
+            header('Location: index.php');
+        }
+        $pdo = conectar();
+        if (!buscarPelicula($pdo, $id)) {
+            header('Location: index.php');
+        }
+        ?>
         <h3>¿Seguro que desea borrar la fila?</h3>
         <form action="index.php" method="post">
             <input type="hidden" name="id" value="<?= $id ?>">
