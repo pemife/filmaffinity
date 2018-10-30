@@ -6,15 +6,21 @@
   </head>
   <body>
     <?php
-    $pdo = new PDO('pgsql:host=localhost;dbname=fa', 'fa', 'fa');
+    require 'auxiliar.php';
+    $pdo = conectar();
 
     if (isset($_POST['id'])){
       $id = $_POST['id'];
-      $st = $pdo->prepare('DELETE FROM peliculas WHERE id = :id');
-      $st->execute([':id' => $id]);
-      ?>
-      <h3>Pelicula borrada correctamente</h3>
-      <?php
+      $pdo->beginTransaction();
+      $pdo->exec('LOCK TABLE peliculas IN SHARE MODE');
+      if (!buscarPelicula($pdo, $id)) {
+        ?><h3>La película no existe</h3><?php
+      }else {
+        $st = $pdo->prepare('DELETE FROM peliculas WHERE id = :id');
+        $st->execute([':id' => $id]);
+        ?><h3>Pelicula borrada correctamente</h3><?php
+      }
+      $pdo->commit();   // Siempre quita el bloqueo
     }
 
     $buscarTitulo = isset($_GET['buscarTitulo'])
