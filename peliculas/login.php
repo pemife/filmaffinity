@@ -35,19 +35,7 @@
         }
         ?>
         <div class="container">
-            <div class="row">
-                <form action="" method="post">
-                    <div class="form-group">
-                        <label for="login">Usuario:</label>
-                        <input class="form-control" type="text" name="login" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Contraseña:</label>
-                        <input class="form-control" type="password" name="password" value="">
-                    </div>
-                    <button type="submit" class="btn btn-default">Iniciar sesión</button>
-                </form>
-            </div>
+            <?php formularioLogin($valores, $pdo, $error) ?>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

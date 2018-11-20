@@ -281,3 +281,24 @@ function comprobarUsuario($valores, $pdo, &$error)
     $error['sesion'] = 'El usuario o la contraseña son incorrectos.';
     return false;
 }
+
+function formularioLogin($valores, $pdo, $error){
+    extract($valores);
+    ?>
+    <div class="row">
+        <form action="" method="post">
+            <div class="form-group <?= hasError('login', $error) ?>">
+                <label for="login">Usuario:</label>
+                <input class="form-control" type="text" name="login" value="<?= h($login) ?>">
+                <?php mensajeError('login', $error) ?>
+            </div>
+            <div class="form-group <?= hasError('password', $error) ?>">
+                <label for="password">Contraseña:</label>
+                <input class="form-control" type="password" name="password" value="">
+                <?php mensajeError('password', $error) ?>
+            </div>
+            <button type="submit" class="btn btn-default">Iniciar sesión</button>
+        </form>
+    </div>
+    <?php
+}
