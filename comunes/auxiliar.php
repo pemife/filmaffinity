@@ -282,7 +282,8 @@ function comprobarUsuario($valores, $pdo, &$error)
     return false;
 }
 
-function formularioLogin($valores, $pdo, $error){
+function formularioLogin($valores, $pdo, $error)
+{
     extract($valores);
     ?>
     <div class="row">
@@ -294,11 +295,45 @@ function formularioLogin($valores, $pdo, $error){
             </div>
             <div class="form-group <?= hasError('password', $error) ?>">
                 <label for="password">Contraseña:</label>
-                <input class="form-control" type="password" name="password" value="">
+                <input class="form-control" type="password" name="password" value="<?= h($password) ?>">
                 <?php mensajeError('password', $error) ?>
             </div>
             <button type="submit" class="btn btn-default">Iniciar sesión</button>
         </form>
     </div>
     <?php
+}
+
+function encabezado()
+{
+    ?>
+    <nav class="navbar navbar-default navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">FilmAffinity</a>
+            </div>
+            <div class="navbar-text navbar-left">
+                <a class="btn btn-info" href="../peliculas/index.php">Películas</a>
+            </div>
+            <div class="navbar-text navbar-left">
+                <a class="btn btn-info" href="../generos/index.php">Géneros</a>
+            </div>
+            <div class="navbar-text navbar-right">
+                <?php if (isset($_SESSION['usuario'])): ?>
+                    <?= $_SESSION['usuario'] ?>
+                    <a href="../comunes/logout.php" class="btn btn-success">Logout</a>
+                <?php else: ?>
+                    <a href="../comunes/login.php" class="btn btn-success">Login</a>
+                <?php endif ?>
+            </div>
+        </div>
+    </nav>
+    <?php
+}
+
+function buscarGenero($pdo, $genero_id)
+{
+    $st = $pdo->prepare('SELECT * FROM generos WHERE genero_id = :genero_id');
+    $st->execute([':genero_id' => $genero_id]);
+    return $st->fetch();
 }
