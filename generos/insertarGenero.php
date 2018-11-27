@@ -11,6 +11,7 @@
     <body>
         <?php
         require '../comunes/auxiliar.php';
+        encabezado();
 
         $valores = PAR;
 

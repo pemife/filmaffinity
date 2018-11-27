@@ -46,16 +46,41 @@
                     $pdo->commit();
                 }
 
-                $buscarTitulo = isset($_GET['buscarTitulo'])
-                ? trim($_GET['buscarTitulo'])
-                : '';
-                $st = $pdo->prepare('SELECT p.*, genero
+                // $buscarTitulo = isset($_GET['buscarTitulo'])
+                // ? trim($_GET['buscarTitulo'])
+                // : '';
+                //
+                // $buscarAnyo = isset($_GET['buscarAnyo'])
+                // ? trim($_GET['buscarAnyo'])
+                // : '';
+
+                $where = $execute = [];
+                $buscarTitulo = $buscarAnyo = "";
+
+                if(isset($_GET['buscarTitulo'])) {
+                    $buscarTitulo = trim($_GET['buscarTitulo']);
+                    if($buscarTitulo !== ''){
+                        $where[] = 'titulo ILIKE :titulo';
+                        $execute[':titulo'] = "%$buscarTitulo%";
+                    }
+                }
+
+                if(isset($_GET['buscarAnyo'])) {
+                    $buscarAnyo = trim($_GET['buscarAnyo']);
+                    if($buscarAnyo !== ''){
+                        $where[] = 'anyo::text = :anyo';
+                        $execute[':anyo'] = $buscarAnyo;
+                    }
+                }
+                $where = empty($where) ? '' : 'WHERE ' . implode(' AND ', $where);
+
+                $st = $pdo->prepare("SELECT p.*, genero
                                        FROM peliculas p
                                        JOIN generos g
                                          ON genero_id = g.id
-                                      WHERE position(lower(:titulo) in lower(titulo)) != 0
-                                   ORDER BY id');
-                $st->execute([':titulo' => $buscarTitulo]);
+                                     $where
+                                   ORDER BY id");
+                $st->execute($execute);
                 ?>
             </div>
             <div class="row" id="busqueda">
@@ -68,7 +93,13 @@
                                 <input id="buscarTitulo" type="text" name="buscarTitulo"
                                        value="<?= $buscarTitulo ?>"
                                        class="form-control">
+                                <br>
+                                <label for="buscarAnyo">Buscar por año:</label>
+                                <input id="buscarAnyo" type="text" name="buscarAnyo"
+                                       value="<?= $buscarAnyo ?>"
+                                       class="form-control">
                             </div>
+                            <br>
                             <input type="submit" value="Buscar" class="btn btn-primary">
                         </form>
                     </fieldset>

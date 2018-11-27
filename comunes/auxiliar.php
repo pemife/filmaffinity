@@ -337,3 +337,14 @@ function buscarGenero($pdo, $genero_id)
     $st->execute([':genero_id' => $genero_id]);
     return $st->fetch();
 }
+
+function piePagina(){
+    ?>
+    <div class="row col-md-12">
+        <footer class="page-footer">
+            <hr>
+            <p class="text-right">@Copyright Pepe Millan</p>
+        </footer>
+    </div>
+    <?php
+}
