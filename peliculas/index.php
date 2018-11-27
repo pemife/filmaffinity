@@ -46,14 +46,6 @@
                     $pdo->commit();
                 }
 
-                // $buscarTitulo = isset($_GET['buscarTitulo'])
-                // ? trim($_GET['buscarTitulo'])
-                // : '';
-                //
-                // $buscarAnyo = isset($_GET['buscarAnyo'])
-                // ? trim($_GET['buscarAnyo'])
-                // : '';
-
                 $where = $execute = [];
                 $buscarTitulo = $buscarAnyo = "";
 
